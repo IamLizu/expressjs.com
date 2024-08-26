@@ -3,7 +3,7 @@ name: Check Translation
 on:
   pull_request:
     branches:
-      - gh-pages
+      - test-new-workflow
     paths:
       - 'en/**'
       - 'es/**'
