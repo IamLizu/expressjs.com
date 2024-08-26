@@ -20,6 +20,8 @@ redirect_from: "/api.html"
   <a id='res' class='h2'></a>
   {% include api/{{ page.lang }}/4x/res.md %}
 
+  <p>meaningless test, will never get landed</p>
+
   <a id='router' class='h2'></a>
   {% include api/{{ page.lang }}/4x/router.md %}
 
