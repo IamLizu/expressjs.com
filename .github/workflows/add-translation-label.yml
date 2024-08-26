@@ -1,0 +1,30 @@
+name: Add Labels to Translation PR
+
+on:
+  repository_dispatch:
+    types: [add-labels]
+
+jobs:
+  add-labels:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+
+    steps:
+      - name: Add Labels
+        uses: actions/github-script@v5
+        with:
+          script: |
+            const payload = context.payload.client_payload;
+            const prNumber = payload.pr_number;
+            const labelsToAdd = payload.labels.split(',');
+            if (labelsToAdd.length > 0) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                labels: labelsToAdd
+              });
+            }
