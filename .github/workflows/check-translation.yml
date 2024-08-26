@@ -42,6 +42,7 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
+            const core = require('@actions/core');
             const languages = ['en', 'es', 'fr', 'it', 'id', 'ja', 'ko', 'pt-br', 'ru', 'sk', 'th', 'tr', 'uk', 'uz', 'zh-cn', 'zh-tw'];
             const prNumber = context.eventName === 'workflow_dispatch' ? context.payload.inputs.prNumber : context.issue.number;
             const { data: files } = await github.rest.pulls.listFiles({
@@ -51,13 +52,17 @@ jobs:
             });
             const modifiedLanguages = new Set(files.map(file => file.filename.split('/')[0]));
             const labelsToAdd = languages.filter(lang => !modifiedLanguages.has(lang)).map(lang => `requires-translation-${lang}`);
-            return labelsToAdd.join(',');
+            core.setOutput("labels_to_add", labelsToAdd.join(','));
 
       - name: Trigger Label Adding Workflow
-        if: steps.check_files.outputs.result != ''
+        if: steps.check_files.outputs.labels_to_add != ''
         uses: peter-evans/repository-dispatch@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           repository: ${{ github.repository }}
           event-type: add-labels
-          client-payload: '{"pr_number": "${{ github.event.pull_request.number }}", "labels": "${{ steps.check_files.outputs.result }}"}'
+          client-payload: |
+            {
+              "pr_number": "${{ github.event.pull_request.number }}",
+              "labels": "${{ steps.check_files.outputs.labels_to_add }}"
+            }
