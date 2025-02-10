@@ -2,8 +2,8 @@
 
 [![NPM Version][npm-version-image]][npm-url]
 [![NPM Downloads][npm-downloads-image]][npm-url]
-[![Build Status][travis-image]][travis-url]
-[![Test Coverage][coveralls-image]][coveralls-url]
+[![Build Status][ci-image]][ci-url]
+[![Coverage Status][coveralls-image]][coveralls-url]
 
 HTTP request logger middleware for node.js
 
@@ -105,9 +105,10 @@ There are various pre-defined formats provided:
 ##### combined
 
 Standard Apache combined log output.
-
 ```
 :remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"
+# will output
+::1 - - [27/Nov/2024:06:21:42 +0000] "GET /combined HTTP/1.1" 200 2 "-" "curl/8.7.1"
 ```
 
 ##### common
@@ -116,6 +117,8 @@ Standard Apache common log output.
 
 ```
 :remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length]
+# will output
+::1 - - [27/Nov/2024:06:21:46 +0000] "GET /common HTTP/1.1" 200 2
 ```
 
 ##### dev
@@ -127,6 +130,8 @@ for information codes.
 
 ```
 :method :url :status :response-time ms - :res[content-length]
+# will output
+GET /dev 200 0.224 ms - 2
 ```
 
 ##### short
@@ -135,6 +140,8 @@ Shorter than default, also including response time.
 
 ```
 :remote-addr :remote-user :method :url HTTP/:http-version :status :res[content-length] - :response-time ms
+# will output
+::1 - GET /short HTTP/1.1 200 2 - 0.283 ms
 ```
 
 ##### tiny
@@ -143,6 +150,8 @@ The minimal output.
 
 ```
 :method :url :status :res[content-length] - :response-time ms
+# will output
+GET /tiny 200 2 - 0.188 ms
 ```
 
 #### Tokens
@@ -418,10 +427,10 @@ function assignId (req, res, next) {
 
 [MIT](LICENSE)
 
+[ci-image]: https://badgen.net/github/checks/expressjs/morgan/master?label=ci
+[ci-url]: https://github.com/expressjs/morgan/actions/workflows/ci.yml
 [coveralls-image]: https://badgen.net/coveralls/c/github/expressjs/morgan/master
 [coveralls-url]: https://coveralls.io/r/expressjs/morgan?branch=master
 [npm-downloads-image]: https://badgen.net/npm/dm/morgan
 [npm-url]: https://npmjs.org/package/morgan
 [npm-version-image]: https://badgen.net/npm/v/morgan
-[travis-image]: https://badgen.net/travis/expressjs/morgan/master
-[travis-url]: https://travis-ci.org/expressjs/morgan
